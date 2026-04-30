@@ -8,6 +8,10 @@ The goal is to keep the Israfel firmware layered on the latest Vial-QMK `vial` b
 
 The original Israfel source includes both `default` and `vial` keymaps. This README documents the Vial build because that is the firmware target for this repository.
 
+## Download
+
+Download the latest prebuilt `kbdcraft_israfel_vial.uf2` firmware from the [latest GitHub release](https://github.com/steadicat/israfel-firmware/releases/latest).
+
 ## Build
 
 Install the build dependencies. The direct `make` build does not require the QMK CLI.
