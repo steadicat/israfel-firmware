@@ -3,6 +3,13 @@
     "vendorId": "0x586A",
     "productId": "0xB005",
     "lighting": "vialrgb",
+    "customKeycodes": [
+        {
+            "name": "Num Word",
+            "title": "Toggle Num Word",
+            "shortName": "Num Word"
+        }
+    ],
     "matrix": {
         "rows": 5,
         "cols": 12

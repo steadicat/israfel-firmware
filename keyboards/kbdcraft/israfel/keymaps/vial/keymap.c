@@ -3,6 +3,50 @@
 
 #include QMK_KEYBOARD_H
 
+#define NUM_WORD_LAYER 3
+
+enum custom_keycodes {
+    NW_TOGG = QK_KB_0,
+};
+
+static bool num_word_active = false;
+
+static bool is_num_word_keycode(uint16_t keycode) {
+    switch (keycode) {
+        case KC_1 ... KC_0:
+        case KC_KP_1 ... KC_KP_0:
+            return true;
+    }
+
+    return false;
+}
+
+static void num_word_on(void) {
+    if (num_word_active) {
+        return;
+    }
+
+    num_word_active = true;
+    layer_on(NUM_WORD_LAYER);
+}
+
+static void num_word_off(void) {
+    if (!num_word_active) {
+        return;
+    }
+
+    num_word_active = false;
+    layer_off(NUM_WORD_LAYER);
+}
+
+static void num_word_toggle(void) {
+    if (num_word_active) {
+        num_word_off();
+    } else {
+        num_word_on();
+    }
+}
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
         KC_ESC,  KC_1,     KC_2,    KC_3,   KC_4,   KC_5,    KC_6,    KC_7,    KC_8,   KC_9,   KC_0,   KC_BSPC,
@@ -21,8 +65,41 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
 		KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
 		KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
-		KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO)
+		KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO),
+    [3] = LAYOUT(
+		_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+		_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+		_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+		_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+		_______, _______, _______, _______, _______, _______, _______, _______, _______)
 };
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (keycode == NW_TOGG) {
+        if (record->event.pressed) {
+            num_word_toggle();
+        }
+        return false;
+    }
+
+    if (!num_word_active || !record->event.pressed) {
+        return true;
+    }
+
+    if (!is_num_word_keycode(keycode)) {
+        num_word_off();
+    }
+
+    return true;
+}
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    if (!layer_state_cmp(state, NUM_WORD_LAYER)) {
+        num_word_active = false;
+    }
+
+    return state;
+}
 
 bool caps_word_press_user(uint16_t keycode) {
     switch (keycode) {
