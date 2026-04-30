@@ -24,3 +24,49 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO)
 };
 
+bool caps_word_press_user(uint16_t keycode) {
+    switch (keycode) {
+        // Dvorak letter keys, in Qwerty keycode terms.
+        case KC_R:
+        case KC_T:
+        case KC_Y:
+        case KC_U:
+        case KC_I:
+        case KC_O:
+        case KC_P:
+        case KC_A:
+        case KC_S:
+        case KC_D:
+        case KC_F:
+        case KC_G:
+        case KC_H:
+        case KC_J:
+        case KC_K:
+        case KC_L:
+        case KC_SCLN:
+        case KC_X:
+        case KC_C:
+        case KC_V:
+        case KC_B:
+        case KC_N:
+        case KC_M:
+        case KC_COMMA:
+        case KC_DOT:
+        case KC_SLSH:
+            add_weak_mods(MOD_BIT(KC_LSFT));
+            return true;
+
+        // Dvorak -/_ key, shifted to underscore while Caps Word is active.
+        case KC_QUOTE:
+            add_weak_mods(MOD_BIT(KC_LSFT));
+            return true;
+
+        case KC_1 ... KC_0:
+        case KC_BSPC:
+        case KC_DEL:
+            return true;
+
+        default:
+            return false;
+    }
+}
