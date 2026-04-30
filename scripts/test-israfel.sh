@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 
 cd "${ISRAFEL_REPO_ROOT}"
 
-for required_tool in git make python3 qmk arm-none-eabi-gcc; do
+for required_tool in git make python3 arm-none-eabi-gcc arm-none-eabi-objcopy; do
     if ! command -v "${required_tool}" >/dev/null 2>&1; then
         printf 'missing required tool: %s\n' "${required_tool}" >&2
         exit 1
@@ -22,5 +22,4 @@ if git submodule status --recursive | grep -q '^-'; then
     make git-submodule
 fi
 
-"${SCRIPT_DIR}/build-israfel.sh" default
 "${SCRIPT_DIR}/build-israfel.sh" vial

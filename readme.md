@@ -1,36 +1,63 @@
-# Quantum Mechanical Keyboard Firmware
+# KBDcraft Israfel Firmware
 
-[![Current Version](https://img.shields.io/github/tag/qmk/qmk_firmware.svg)](https://github.com/qmk/qmk_firmware/tags)
-[![Discord](https://img.shields.io/discord/440868230475677696.svg)](https://discord.gg/qmk)
-[![Docs Status](https://img.shields.io/badge/docs-ready-orange.svg)](https://docs.qmk.fm)
-[![GitHub contributors](https://img.shields.io/github/contributors/qmk/qmk_firmware.svg)](https://github.com/qmk/qmk_firmware/pulse/monthly)
-[![GitHub forks](https://img.shields.io/github/forks/qmk/qmk_firmware.svg?style=social&label=Fork)](https://github.com/qmk/qmk_firmware/)
+This repository is a complete Vial-QMK source tree for the KBDcraft Israfel.
 
-This is a keyboard firmware based on the [tmk\_keyboard firmware](https://github.com/tmk/tmk_keyboard) with some useful features for Atmel AVR and ARM controllers, and more specifically, the [OLKB product line](https://olkb.com), the [ErgoDox EZ](https://ergodox-ez.com) keyboard, and the Clueboard product line.
+It is based on a fork of Vial-QMK and combines that firmware tree with the official KBDcraft Israfel source files from [KBDcraft's open-source download page](https://kbdcraft.store/pages/open-source-%E5%BC%80%E6%BA%90-%EC%98%A4%ED%94%98-%EC%86%8C%EC%8A%A4-%E3%82%AA%E3%83%BC%E3%83%97%E3%83%B3%E3%82%BD%E3%83%BC%E3%82%B9).
 
-## Documentation
+The goal is to keep the Israfel firmware layered on the latest Vial-QMK `vial` branch, with the full source code ready to clone or download and build directly without manually combining Vial-QMK and KBDcraft files.
 
-* [See the official documentation on docs.qmk.fm](https://docs.qmk.fm)
+The original Israfel source includes both `default` and `vial` keymaps. This README documents the Vial build because that is the firmware target for this repository.
 
-The docs are powered by [VitePress](https://vitepress.dev/). They are also viewable offline; see [Previewing the Documentation](https://docs.qmk.fm/#/contributing?id=previewing-the-documentation) for more details.
+## Build
 
-You can request changes by making a fork and opening a [pull request](https://github.com/qmk/qmk_firmware/pulls).
+Install the build dependencies. The direct `make` build does not require the QMK CLI.
 
-## Supported Keyboards
+On macOS, install Apple's command line tools first if you do not already have `git` and `make`:
 
-* [Planck](/keyboards/planck/)
-* [Preonic](/keyboards/preonic/)
-* [ErgoDox EZ](/keyboards/ergodox_ez/)
-* [Clueboard](/keyboards/clueboard/)
-* [Cluepad](/keyboards/clueboard/17/)
-* [Atreus](/keyboards/atreus/)
+```sh
+xcode-select --install
+```
 
-The project also includes community support for [lots of other keyboards](/keyboards/).
+Then install Python and the ARM compiler/binutils:
 
-## Maintainers
+```sh
+brew install python arm-none-eabi-gcc@8 arm-none-eabi-binutils
+```
 
-QMK is developed and maintained by Jack Humbert of OLKB with contributions from the community, and of course, [Hasu](https://github.com/tmk). The OLKB product firmwares are maintained by [Jack Humbert](https://github.com/jackhumbert), the Ergodox EZ by [ZSA Technology Labs](https://github.com/zsa), the Clueboard by [Zach White](https://github.com/skullydazed), and the Atreus by [Phil Hagelberg](https://github.com/technomancy).
+Install the Python packages used by the bundled QMK/Vial build scripts:
 
-## Official Website
+```sh
+python3 -m pip install -r requirements.txt
+```
 
-[qmk.fm](https://qmk.fm) is the official website of QMK, where you can find links to this page, the documentation, and the keyboards supported by QMK.
+On macOS, the Israfel keyboard rules add the Homebrew ARM toolchain paths automatically during the build.
+
+You can also build with the QMK CLI, but it still uses the same compiler toolchain and does not remove these dependencies.
+
+From the repository root, initialize submodules if needed:
+
+```sh
+make git-submodule
+```
+
+Build the Israfel Vial firmware:
+
+```sh
+make kbdcraft/israfel:vial
+```
+
+The generated UF2 firmware is usually copied to the repository root as:
+
+```text
+kbdcraft_israfel_vial.uf2
+```
+
+## Flash
+
+1. Unplug the keyboard.
+2. Hold the first key, usually Escape, while plugging the keyboard back in.
+3. Release the key when the UF2 bootloader drive appears.
+4. Copy `kbdcraft_israfel_vial.uf2` to the bootloader drive.
+5. Wait for the keyboard to reboot.
+
+After flashing, open Vial at https://get.vial.today and connect to `07 Israfel`.

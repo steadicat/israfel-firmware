@@ -8,13 +8,9 @@ An ergonomic split 50% low-profile keyboard from KBDcraft.
 
 Make example for this keyboard after setting up the Vial-QMK build environment:
 
-    make kbdcraft/israfel:default
     make kbdcraft/israfel:vial
 
-This fork also provides helper scripts from the repository root:
-
-    scripts/build-israfel.sh vial
-    scripts/test-israfel.sh
+The original Israfel source includes both `default` and `vial` keymaps. This repository documents the Vial build.
 
 ## Bootloader
 

@@ -9,9 +9,9 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 keymap="${1:-vial}"
 
 case "${keymap}" in
-    default|vial) ;;
+    vial) ;;
     *)
-        printf 'usage: %s [default|vial]\n' "$0" >&2
+        printf 'usage: %s [vial]\n' "$0" >&2
         exit 2
         ;;
 esac
