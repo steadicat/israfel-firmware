@@ -4,7 +4,7 @@ This repository is a complete Vial-QMK source tree for the KBDcraft Israfel.
 
 It is based on a fork of Vial-QMK and combines that firmware tree with the official KBDcraft Israfel source files from [KBDcraft's open-source download page](https://kbdcraft.store/pages/open-source-%E5%BC%80%E6%BA%90-%EC%98%A4%ED%94%98-%EC%86%8C%EC%8A%A4-%E3%82%AA%E3%83%BC%E3%83%97%E3%83%B3%E3%82%BD%E3%83%BC%E3%82%B9).
 
-The goal is to keep the Israfel firmware layered on the latest Vial-QMK `vial` branch, with the full source code ready to clone or download and build directly without manually combining Vial-QMK and KBDcraft files.
+The goal is to keep the Israfel firmware layered on the latest Vial-QMK `vial` branch, with the source ready to clone and build directly without manually combining Vial-QMK and KBDcraft files.
 
 The original Israfel source includes both `default` and `vial` keymaps. This README documents the Vial build because that is the firmware target for this repository.
 
@@ -14,7 +14,16 @@ Download the latest prebuilt `kbdcraft_israfel_vial.uf2` firmware from the [late
 
 ## Build
 
-Install the build dependencies. The direct `make` build does not require the QMK CLI.
+Clone this fork with its Git submodules. GitHub source ZIPs do not include the submodule contents required to build.
+
+```sh
+git clone --branch vial --recurse-submodules https://github.com/steadicat/israfel-firmware.git
+cd israfel-firmware
+```
+
+If you already have a Git clone, run `git submodule update --init --recursive` from the repository root.
+
+Install the ARM toolchain, Python, and the QMK CLI. The `make` build calls the QMK CLI internally.
 
 On macOS, install Apple's command line tools first if you do not already have `git` and `make`:
 
@@ -25,26 +34,20 @@ xcode-select --install
 Then install Python and the ARM compiler/binutils:
 
 ```sh
-brew install python arm-none-eabi-gcc@8 arm-none-eabi-binutils
+brew install python osx-cross/arm/arm-none-eabi-gcc@8 osx-cross/arm/arm-none-eabi-binutils
 ```
 
-Install the Python packages used by the bundled QMK/Vial build scripts:
+Install the QMK CLI and Python build dependencies in a virtual environment:
 
 ```sh
-python3 -m pip install -r requirements.txt
+python3 -m venv .venv
+. .venv/bin/activate
+python3 -m pip install qmk -r requirements.txt
 ```
 
 On macOS, the Israfel keyboard rules add the Homebrew ARM toolchain paths automatically during the build.
 
-You can also build with the QMK CLI, but it still uses the same compiler toolchain and does not remove these dependencies.
-
-From the repository root, initialize submodules if needed:
-
-```sh
-make git-submodule
-```
-
-Build the Israfel Vial firmware:
+Build the Israfel Vial firmware from the repository root with the virtual environment active:
 
 ```sh
 make kbdcraft/israfel:vial

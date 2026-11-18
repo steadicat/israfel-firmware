@@ -8,14 +8,14 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 
 cd "${ISRAFEL_REPO_ROOT}"
 
-for required_tool in git make python3 arm-none-eabi-gcc arm-none-eabi-objcopy; do
+for required_tool in git make python3 qmk arm-none-eabi-gcc arm-none-eabi-objcopy; do
     if ! command -v "${required_tool}" >/dev/null 2>&1; then
         printf 'missing required tool: %s\n' "${required_tool}" >&2
         exit 1
     fi
 done
 
-python3 -m json.tool keyboards/kbdcraft/israfel/info.json >/dev/null
+python3 -m json.tool keyboards/kbdcraft/israfel/keyboard.json >/dev/null
 python3 -m json.tool keyboards/kbdcraft/israfel/keymaps/vial/vial.json >/dev/null
 
 if git submodule status --recursive | grep -q '^-'; then
